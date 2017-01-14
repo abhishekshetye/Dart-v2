@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Dart</string>
+
+    <string name="facebook_app_id">822171937921297</string>
+    <string name="title_activity_basic">Basic</string>
+    <string name="title_activity_amazon_product_advertising">AmazonProductAdvertising</string>
+    <string name="title_activity_amazon_product_ad">AmazonProductAd</string>
+</resources>

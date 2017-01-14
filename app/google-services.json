@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "190951428212",
+    "firebase_url": "https://dart-6832c.firebaseio.com",
+    "project_id": "dart-6832c",
+    "storage_bucket": "dart-6832c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190951428212:android:9852e232a1b0f70d",
+        "android_client_info": {
+          "package_name": "com.codebreaker.dart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190951428212-3n1vko4cdaoivro8m1o4184h45ig80e2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [ { "current_key": "AIzaSyCl2zFVlTLIv2IvA1Nmw3pe4CKwbRfTCrQ" } ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
