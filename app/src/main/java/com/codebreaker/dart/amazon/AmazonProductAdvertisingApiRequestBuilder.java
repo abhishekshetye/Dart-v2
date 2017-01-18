@@ -280,7 +280,9 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
     private static String createResponseGroupRequestValue(final List<ItemInformation> responseGroup) {
         // add item attributes to response group if none was selected
         if (responseGroup.size() == 0) {
-            responseGroup.add(ItemInformation.ATTRIBUTES);
+            //earlier --> responseGroup.add(ItemInformation.ATTRIBUTES);
+            //change made by abhishek
+            responseGroup.add(ItemInformation.IMAGES);
         }
 
         String responseGroupRequestValue = "";
