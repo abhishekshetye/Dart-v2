@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Dart.iml" filepath="$PROJECT_DIR$/Dart.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exude-0.0.3/exude-0.0.3.iml" filepath="$PROJECT_DIR$/exude-0.0.3/exude-0.0.3.iml" />
       <module fileurl="file://$PROJECT_DIR$/lucene-analyzers-3.4.0/lucene-analyzers-3.4.0.iml" filepath="$PROJECT_DIR$/lucene-analyzers-3.4.0/lucene-analyzers-3.4.0.iml" />
       <module fileurl="file://$PROJECT_DIR$/lucene-core-3.6.2/lucene-core-3.6.2.iml" filepath="$PROJECT_DIR$/lucene-core-3.6.2/lucene-core-3.6.2.iml" />
     </modules>

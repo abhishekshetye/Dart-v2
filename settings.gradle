@@ -1,1 +1,1 @@
-include ':app', ':lucene-core-3.6.2', ':lucene-analyzers-3.4.0'
+include ':app', ':lucene-core-3.6.2', ':lucene-analyzers-3.4.0', ':exude-0.0.3'

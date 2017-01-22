@@ -33,6 +33,7 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.amitshekhar.android:android-networking:0.3.0'
     compile 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
+    compile project(':exude-0.0.3')
     testCompile 'junit:junit:4.12'
     compile project(':lucene-core-3.6.2')
     compile project(':lucene-analyzers-3.4.0')
