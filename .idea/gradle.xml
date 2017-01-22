@@ -10,6 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/lucene-analyzers-3.4.0" />
+            <option value="$PROJECT_DIR$/lucene-core-3.6.2" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

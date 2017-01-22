@@ -26,21 +26,21 @@
         <activity
             android:name=".Basic"
             android:label="@string/title_activity_basic"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AmazonProductAd"
             android:label="@string/title_activity_amazon_product_ad"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".playground.XMLParsing"
-            android:label="My App"
-            >
+            android:label="My App"></activity>
+        <activity android:name=".playground.KeywordExtractionActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
