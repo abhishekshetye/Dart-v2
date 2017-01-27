@@ -28,14 +28,20 @@
             android:label="@string/title_activity_basic"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".customapi.JsonTest"
+            android:label="@string/title_activity_basic"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".AmazonProductAd"
             android:label="@string/title_activity_amazon_product_ad"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".playground.XMLParsing"
-            android:label="My App"></activity>
+            android:label="My App" />
         <activity android:name=".playground.KeywordExtractionActivity">
+
+        </activity>
+        <activity android:name=".ShowActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
