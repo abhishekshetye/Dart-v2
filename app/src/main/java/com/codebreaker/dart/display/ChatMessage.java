@@ -1,5 +1,7 @@
 package com.codebreaker.dart.display;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by abhishek on 1/14/17.
  */
@@ -7,11 +9,20 @@ package com.codebreaker.dart.display;
 public class ChatMessage {
     private boolean isImage, isMine;
     private String content;
+    private Drawable imagesource;
 
     public ChatMessage(String message, boolean mine, boolean image) {
         content = message;
         isMine = mine;
         isImage = image;
+    }
+
+    public Drawable getImagesource() {
+        return imagesource;
+    }
+
+    public void setImagesource(Drawable imagesource) {
+        this.imagesource = imagesource;
     }
 
     public String getContent() {

@@ -1,10 +1,12 @@
 package com.codebreaker.dart.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,9 +49,15 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
             TextView textView = (TextView) convertView.findViewById(R.id.text);
             textView.setText(getItem(position).getContent());
         } else if (viewType == MY_IMAGE) {
-            //convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_image, parent, false);
+            Log.d("IMAGED", "Here 1");
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_image, parent, false);
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
+            imageView.setImageDrawable(getItem(position).getImagesource());
         } else {
-            // convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_image, parent, false);
+            Log.d("IMAGED", "Here 4");
+             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_image, parent, false);
+             ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
+             imageView.setImageDrawable(getItem(position).getImagesource());
         }
         convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
             @Override

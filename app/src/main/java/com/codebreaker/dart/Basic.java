@@ -61,6 +61,11 @@ public class Basic extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+        if(!checkPermission()){
+            requestPermission();
+        }
+
+
         //setting ids for components
         mListView = (ListView) findViewById(R.id.listView);
         mButtonSend = (FloatingActionButton) findViewById(R.id.btn_send);
@@ -95,10 +100,6 @@ public class Basic extends AppCompatActivity {
             }
         });
 
-
-        if(!checkPermission()){
-            requestPermission();
-        }
 
 
         //checking SD card availablility
@@ -211,6 +212,7 @@ public class Basic extends AppCompatActivity {
     //Sending Message Methods
     private void sendMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, true, false);
+        //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
         mAdapter.add(chatMessage);
         //respond as Helloworld
         //mimicOtherMessage("HelloWorld");
@@ -218,6 +220,7 @@ public class Basic extends AppCompatActivity {
 
     private void mimicOtherMessage(String message) {
         ChatMessage chatMessage = new ChatMessage(message, false, false);
+        //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
         mAdapter.add(chatMessage);
     }
 
