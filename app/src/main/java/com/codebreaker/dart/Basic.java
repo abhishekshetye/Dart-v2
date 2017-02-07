@@ -21,6 +21,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.codebreaker.dart.adapters.ChatMessageAdapter;
+import com.codebreaker.dart.amazon.AmazonHelper;
+import com.codebreaker.dart.amazon.AmazonListener;
+import com.codebreaker.dart.amazon.Product;
 import com.codebreaker.dart.display.ChatMessage;
 import com.codebreaker.dart.zomato.GPSTracker;
 
@@ -39,8 +42,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Basic extends AppCompatActivity {
+public class Basic extends AppCompatActivity implements AmazonListener {
 
     private static final int PERMISSION_WRITE_REQUEST_CODE = 4;
     private static final int PERMISSION_LOCATION_REQUEST_CODE = 5;
@@ -277,9 +281,32 @@ public class Basic extends AppCompatActivity {
     }
 
     private void mimicOtherMessage(String message) {
-        ChatMessage chatMessage = new ChatMessage(message, false, false);
-        //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
-        mAdapter.add(chatMessage);
+        ChatMessage chatMessage;
+
+        if(message.length()<6){
+            chatMessage = new ChatMessage(message, false, false);
+            //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
+            mAdapter.add(chatMessage);
+            return;
+        }
+
+        switch(message.substring(0,6)){
+
+            case "AMZBUY":
+                String item = message.substring(6, message.length());
+                AmazonHelper helper = new AmazonHelper();
+                helper.setOnAmazonListener(this);
+                helper.getDataforSellingItems(item);
+                chatMessage = new ChatMessage("Please wait..", false, false);
+                mAdapter.add(chatMessage);
+                break;
+
+            default:
+                chatMessage = new ChatMessage(message, false, false);
+                //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
+                mAdapter.add(chatMessage);
+        }
+
     }
 
     private void sendMessage() {
@@ -294,4 +321,16 @@ public class Basic extends AppCompatActivity {
         mAdapter.add(chatMessage);
     }
 
+    @Override
+    public void getData(final List<Product> products) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for(Product p : products){
+                    mimicOtherMessage(p.getName());
+                }
+            }
+        });
+
+    }
 }

@@ -282,7 +282,7 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
         if (responseGroup.size() == 0) {
             //earlier --> responseGroup.add(ItemInformation.ATTRIBUTES);
             //change made by abhishek
-            responseGroup.add(ItemInformation.IMAGES);
+            responseGroup.add(ItemInformation.ATTRIBUTES);
         }
 
         String responseGroupRequestValue = "";
