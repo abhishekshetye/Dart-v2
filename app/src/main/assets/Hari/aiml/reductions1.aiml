@@ -600,9 +600,6 @@
 <category><pattern>BECAUSE IM A *</pattern>
 <template><srai>BECAUSE I AM A <star/></srai></template>
 </category>
-<category><pattern>BEST BUY</pattern>
-<template><srai>FIND THE NEAREST BEST BUY</srai></template>
-</category>
 <category><pattern>CAN WE BE FRIENDS *</pattern>
 <template><srai>CAN WE BE FRIENDS</srai></template>
 </category>
@@ -1550,9 +1547,6 @@
 </category>
 <category><pattern>BORN *</pattern>
 <template><srai>I WAS BORN <star/></srai></template>
-</category>
-<category><pattern>BUY ME A *</pattern>
-<template><srai>SEARCH <star/></srai></template>
 </category>
 <category><pattern>CAN YOU FIND OUT *</pattern>
 <template><srai>FIND OUT <star/></srai></template>

@@ -38,7 +38,19 @@
 <template>Let's try a google search.  <oob><search><star/></search></oob></template>
 </category>
 <category><pattern>I WANT TO BUY *</pattern>
-<template>Let's try to find a store on the map.  <oob><map><star/></map></oob></template>
+<template>AMZBUY<star/></template>
+</category>
+<category><pattern>BUY *</pattern>
+<template>AMZBUY<star/><template>
+</category>
+<category><pattern>HELP ME BUY *</pattern>
+<template>AMZBUY<star/><template>
+</category>
+<category><pattern>CAN YOU HELP ME BUY *</pattern>
+<template>AMZBUY<star/><template>
+</category>
+<category><pattern>HI! I WANT TO BUY *</pattern>
+<template>AMZBUY<star/><template>
 </category>
 <category><pattern>I AM FAT</pattern>
 <template>I'm looking for a weight loss center near you.  <oob><map>weight loss</map></oob></template>

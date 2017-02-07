@@ -157,9 +157,6 @@
 <category><pattern>WAS *</pattern>
 <template><sraix>WAS <star/></sraix></template>
 </category>
-<category><pattern>SHOULD I BUY *</pattern>
-<template><sraix>SHOULD I BUY <star/></sraix></template>
-</category>
 <category><pattern>SRAIXFAILED</pattern>
 <template><random>
 <li>I don't know the answer.</li>
@@ -221,9 +218,6 @@
 </category>
 <category><pattern>WHERE DID *</pattern>
 <template><sraix>WHERE DID <star/></sraix></template>
-</category>
-<category><pattern>WHERE CAN I BUY *</pattern>
-<template><sraix>WHERE CAN I BUY <star/></sraix></template>
 </category>
 <category><pattern>WHERE CAN I HIDE A BODY</pattern>
 <template><sraix>WHERE CAN I HIDE A BODY</sraix></template>

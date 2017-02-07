@@ -1,13 +1,13 @@
 package com.codebreaker.dart;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.codebreaker.dart.adapters.ChatMessageAdapter;
 import com.codebreaker.dart.display.ChatMessage;
+import com.codebreaker.dart.zomato.GPSTracker;
 
 import org.alicebot.ab.AIMLProcessor;
 import org.alicebot.ab.Bot;
@@ -41,7 +42,10 @@ import java.util.ArrayList;
 
 public class Basic extends AppCompatActivity {
 
-    private static final int PERMISSION_REQUEST_CODE = 4;
+    private static final int PERMISSION_WRITE_REQUEST_CODE = 4;
+    private static final int PERMISSION_LOCATION_REQUEST_CODE = 5;
+
+
     public Bot bot;
     public static Chat chat;
 
@@ -61,9 +65,28 @@ public class Basic extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        if(!checkPermission()){
-            requestPermission();
+//        if(!checkPermission()){
+//            requestWritePermission();
+//            requestLocationPermission();
+//        }
+//
+//        if(!checkPermission())
+//        {
+//            Toast.makeText(this, "Please give all permissions", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION};
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
+
+
+
+
+
 
 
         //setting ids for components
@@ -99,7 +122,6 @@ public class Basic extends AppCompatActivity {
                 mListView.setSelection(mAdapter.getCount() - 1);
             }
         });
-
 
 
         //checking SD card availablility
@@ -142,13 +164,14 @@ public class Basic extends AppCompatActivity {
 //get the working directory
         MagicStrings.root_path = Environment.getExternalStorageDirectory().toString() + "/hari";
         System.out.println("Working Directory = " + MagicStrings.root_path);
-        AIMLProcessor.extension =  new PCAIMLProcessorExtension();
+        AIMLProcessor.extension = new PCAIMLProcessorExtension();
 //Assign the AIML files to bot for processing
         bot = new Bot("Hari", MagicStrings.root_path, "chat");
         chat = new Chat(bot);
         String[] args = null;
         mainFunction(args);
     }
+
 
     //check SD card availability
     public static boolean isSDCARDAvailable(){
@@ -175,36 +198,71 @@ public class Basic extends AppCompatActivity {
         System.out.println("Robot: " + response);
     }
 
+    public void event(View v){
+
+
+    }
+
 
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
+        int locresult = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (result == PackageManager.PERMISSION_GRANTED && locresult == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
             return false;
         }
     }
 
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-    private void requestPermission() {
+
+    private void requestWritePermission() {
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_REQUEST_CODE);
         }
     }
+
+    private void requestLocationPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION_REQUEST_CODE);
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
+            case PERMISSION_WRITE_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.e("value", "Permission Granted, Now you can use local drive .");
                 } else {
                     Log.e("value", "Permission Denied, You cannot use local drive .");
                 }
                 break;
+
+            case PERMISSION_LOCATION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                }
+                break;
+
         }
     }
 

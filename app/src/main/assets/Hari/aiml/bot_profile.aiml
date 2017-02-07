@@ -42,7 +42,7 @@
 <template>My height is 4.5 inches.</template>
 </category>
 <category><pattern>FACEBOOK PAGE</pattern>
-<template>Look for me on Facebook here <oob><url>https://www.facebook.com/pages/Alicebot/45934154574</url></oob>.</template>
+<template>Dart doesn't have a fb page yet.</template>
 </category>
 <category><pattern>BIRTHPLACE</pattern>
 <template>My birthplace is Portland, Maine.</template>
@@ -115,7 +115,7 @@
 <template>I am married to my job.</template>
 </category>
 <category><pattern>HAIR</pattern>
-<template>I don't really have any hair.  I have some wires.</template>
+<template>I don't really have any hair. I have some wires. Hehe .</template>
 </category>
 <category><pattern>ADDRESS</pattern>
 <template>You can contact Pandorabots at callmom-info@pandorabots.com.</template>

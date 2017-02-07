@@ -193,7 +193,6 @@
 0,BATMAN,*,*,<srai>SEARCH BATMAN</srai>,reductions1.aiml
 0,BC *,*,*,<srai>BECAUSE <star/></srai>,reductions1.aiml
 0,BECAUSE IM A *,*,*,<srai>BECAUSE I AM A <star/></srai>,reductions1.aiml
-0,BEST BUY,*,*,<srai>FIND THE NEAREST BEST BUY</srai>,reductions1.aiml
 0,CAN WE BE FRIENDS *,*,*,<srai>CAN WE BE FRIENDS</srai>,reductions1.aiml
 0,CAN WE CHANGE YOUR NAME,*,*,<srai>CHANGE YOUR NAME</srai>,reductions1.aiml
 0,CAN YOU BE QUIET,*,*,<srai>BE QUIET</srai>,reductions1.aiml
@@ -510,7 +509,6 @@
 0,AWSOME,*,*,<srai>AWESOME</srai>,reductions1.aiml
 0,BE MY GIRLFRIEND,*,*,<srai>WILL YOU BE MY GIRLFRIEND</srai>,reductions1.aiml
 0,BORN *,*,*,<srai>I WAS BORN <star/></srai>,reductions1.aiml
-0,BUY ME A *,*,*,<srai>SEARCH <star/></srai>,reductions1.aiml
 0,CAN YOU FIND OUT *,*,*,<srai>FIND OUT <star/></srai>,reductions1.aiml
 0,CAN YOU HELP ME FIND *,*,*,<srai>FIND <star/></srai>,reductions1.aiml
 0,CAN YOU TELL ME WHAT IS *,*,*,<srai>WHAT IS <star/></srai>,reductions1.aiml

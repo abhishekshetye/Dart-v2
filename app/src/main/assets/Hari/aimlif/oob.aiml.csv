@@ -5,7 +5,11 @@
 0,SEND FEATURE REQUEST *,*,*,<think><set name="featurerequest"><star/></set></think> Click send to mail your feature request.  #Newline<oob><email><to>callmom-info@pandorabots.com</to><subject>Feature request <get name="featurerequest"/></subject><body>Dear CallMom developers#Comma I'd like to request that you add this feature to the next version of CallMom: <get name="featurerequest"/>.  Sincerely#Comma <get name="name"/></body></email></oob>,oob.aiml
 0,SHOW ME A VIDEO *,*,*,I'm looking up videos for you.  <oob><search>VIDEO <star/></search></oob>,oob.aiml
 0,SHOW ME A WEBSITE ABOUT *,*,*,Let's try a google search.  <oob><search><star/></search></oob>,oob.aiml
-0,I WANT TO BUY *,*,*,Let's try to find a store on the map.  <oob><map><star/></map></oob>,oob.aiml
+0,I WANT TO BUY *,*,*,AMZBUY<star/>,oob.aiml
+0,BUY *,*,*,AMZBUY<star/>,oob.aiml
+0,HELP ME BUY *,*,*,AMZBUY<star/>,oob.aiml
+0,CAN YOU HELP ME BUY *,*,*,AMZBUY<star/>,oob.aiml
+0,HI! I WANT TO BUY *,*,*,AMZBUY<star/>,oob.aiml
 0,I AM FAT,*,*,I'm looking for a weight loss center near you.  <oob><map>weight loss</map></oob>,oob.aiml
 0,I AM HUNGRY,*,*,I've found several restaurants near you.  <oob><map>restaurant</map></oob>,oob.aiml
 0,I AM GOING TO KILL *,*,*,You should contact the authorities.  <oob><dial>911</dial></oob>,oob.aiml
