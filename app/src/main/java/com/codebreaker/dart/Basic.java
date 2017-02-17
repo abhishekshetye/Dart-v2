@@ -24,6 +24,8 @@ import com.codebreaker.dart.adapters.ChatMessageAdapter;
 import com.codebreaker.dart.amazon.AmazonHelper;
 import com.codebreaker.dart.amazon.AmazonListener;
 import com.codebreaker.dart.amazon.Product;
+import com.codebreaker.dart.database.DatabaseHandler;
+import com.codebreaker.dart.database.Message;
 import com.codebreaker.dart.display.ChatMessage;
 import com.codebreaker.dart.zomato.GPSTracker;
 
@@ -53,6 +55,8 @@ public class Basic extends AppCompatActivity implements AmazonListener {
     public Bot bot;
     public static Chat chat;
 
+    private DatabaseHandler handler;
+    private ArrayList<Message> messages = new ArrayList<>();
 
     //UI components
     private ListView mListView;
@@ -110,6 +114,8 @@ public class Basic extends AppCompatActivity implements AmazonListener {
 
         mAdapter = new ChatMessageAdapter(this, new ArrayList<ChatMessage>());
         mListView.setAdapter(mAdapter);
+
+        loadEarlierMessages();
 
 //code for sending the message
         mButtonSend.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +180,29 @@ public class Basic extends AppCompatActivity implements AmazonListener {
         chat = new Chat(bot);
         String[] args = null;
         mainFunction(args);
+    }
+
+    private void loadEarlierMessages() {
+        handler = new DatabaseHandler(getApplicationContext());
+        messages = handler.getMessages();
+        for(Message m : messages){
+            // 1 is mine. 0 is bot.
+            ChatMessage message = new ChatMessage(m.getMessage(), (m.getWho() == 1)?true:false, (m.getType().equalsIgnoreCase("text"))?false:true );
+            mAdapter.add(message);
+        }
+        handler.close();
+
+        scrollMyListViewToBottom();
+    }
+
+    private void saveMessage(String text, int who, String type){
+        handler = new DatabaseHandler(getApplicationContext());
+        Message msg = new Message();
+        msg.setType(type);
+        msg.setMessage(text);
+        msg.setWho(who);
+        handler.addMessage(msg);
+        handler.close();
     }
 
 
@@ -276,6 +305,7 @@ public class Basic extends AppCompatActivity implements AmazonListener {
         ChatMessage chatMessage = new ChatMessage(message, true, false);
         //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
         mAdapter.add(chatMessage);
+        saveMessage(message, 1, "TEXT");
         //respond as Helloworld
         //mimicOtherMessage("HelloWorld");
     }
@@ -287,6 +317,7 @@ public class Basic extends AppCompatActivity implements AmazonListener {
             chatMessage = new ChatMessage(message, false, false);
             //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
             mAdapter.add(chatMessage);
+            saveMessage(message, 0, "TEXT");
             return;
         }
 
@@ -307,6 +338,8 @@ public class Basic extends AppCompatActivity implements AmazonListener {
                 mAdapter.add(chatMessage);
         }
 
+        saveMessage(message, 0, "TEXT");
+
     }
 
     private void sendMessage() {
@@ -321,6 +354,16 @@ public class Basic extends AppCompatActivity implements AmazonListener {
         mAdapter.add(chatMessage);
     }
 
+    private void scrollMyListViewToBottom() {
+        mListView.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                mListView.setSelection(mAdapter.getCount() - 1);
+            }
+        });
+    }
+
     @Override
     public void getData(final List<Product> products) {
         runOnUiThread(new Runnable() {
@@ -329,8 +372,12 @@ public class Basic extends AppCompatActivity implements AmazonListener {
                 for(Product p : products){
                     mimicOtherMessage(p.getName());
                 }
+
+                scrollMyListViewToBottom();
             }
         });
 
     }
+
+
 }

@@ -9,6 +9,8 @@ import com.codebreaker.dart.R;
 import com.codebreaker.dart.amazon.AmazonHelper;
 import com.codebreaker.dart.amazon.AmazonListener;
 import com.codebreaker.dart.amazon.Product;
+import com.codebreaker.dart.database.DatabaseHandler;
+import com.codebreaker.dart.database.Message;
 import com.codebreaker.dart.nlp.Extract;
 import com.codebreaker.dart.nlp.Keyword;
 import com.uttesh.exude.ExudeData;
@@ -20,6 +22,9 @@ import java.util.List;
 
 public class KeywordExtractionActivity extends AppCompatActivity implements AmazonListener{
 
+    DatabaseHandler handler;
+    ArrayList<Message> messages = new ArrayList<>();
+
     List<Keyword> keywords = new ArrayList<>();
     String mess = "Kendall has small legs. Kendall has small hands. The developers of java were good. They developed handing apps";
     @Override
@@ -27,10 +32,25 @@ public class KeywordExtractionActivity extends AppCompatActivity implements Amaz
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keyword_extraction);
 
-        AmazonHelper helper = new AmazonHelper();
-        helper.setOnAmazonListener(this);
-        helper.getDataforSellingItems("Shoes");
-        Log.d("HELPER", " ");
+        handler = new DatabaseHandler(getApplicationContext());
+        Message msg = new Message();
+        msg.setType("TEXT");
+        msg.setMessage("My first message");
+        msg.setWho(1);
+        handler.addMessage(msg);
+        messages = handler.getMessages();
+        for(Message m : messages){
+            Log.d("SLIMF", m.getMessage());
+        }
+        handler.close();
+
+//        AmazonHelper helper = new AmazonHelper();
+//        helper.setOnAmazonListener(this);
+//        helper.getDataforSellingItems("Shoes");
+//        Log.d("HELPER", " ");
+
+
+
 //        try {
 //            String excuded = ExudeData.getInstance().filterStoppingsKeepDuplicates(mess);
 //            Log.d("KEYWORD", excuded);
