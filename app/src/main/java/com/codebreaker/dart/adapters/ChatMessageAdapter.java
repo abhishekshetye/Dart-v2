@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.display.ChatMessage;
 
@@ -21,8 +22,10 @@ import java.util.List;
 
 public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
     private static final int MY_MESSAGE = 0, OTHER_MESSAGE = 1, MY_IMAGE = 2, OTHER_IMAGE = 3;
+    private Context context;
     public ChatMessageAdapter(Context context, List<ChatMessage> data) {
         super(context, R.layout.item_mine_message, data);
+        this.context = context;
     }
     @Override
     public int getViewTypeCount() {
@@ -57,7 +60,9 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
             Log.d("IMAGED", "Here 4");
              convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_image, parent, false);
              ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
-             imageView.setImageDrawable(getItem(position).getImagesource());
+            Glide.with(context).load(getItem(position).getContent()).into(imageView);
+             //imageView.setImageDrawable(getItem(position).getImagesource());
+
         }
         convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
             @Override

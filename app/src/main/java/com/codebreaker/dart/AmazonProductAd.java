@@ -64,7 +64,7 @@ public class AmazonProductAd extends AppCompatActivity {
     public void getDataforSellingItems(String item){
         myAuthentication = AmazonWebServiceAuthentication.create(yourAssociateTag, yourAccessKeyId, yourSecretAccessKey);
         final String requestUrl = AmazonProductAdvertisingApiRequestBuilder.forItemSearch(item)
-                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication);
+                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication, 1);
         Log.d("URL ", requestUrl);
 
         try {
@@ -131,7 +131,7 @@ public class AmazonProductAd extends AppCompatActivity {
         if(myAuthentication!=null)
             myAuthentication = AmazonWebServiceAuthentication.create(yourAssociateTag, yourAccessKeyId, yourSecretAccessKey);
         final String requestUrl = AmazonProductAdvertisingApiRequestBuilder.forItemLookup(asin, ItemId.Type.ASIN)
-                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication);
+                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication, 0);
         Log.d("IMAGEURL", requestUrl);
 
         try {

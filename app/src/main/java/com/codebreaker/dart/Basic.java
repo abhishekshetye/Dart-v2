@@ -310,6 +310,12 @@ public class Basic extends AppCompatActivity implements AmazonListener {
         //mimicOtherMessage("HelloWorld");
     }
 
+    private void mimicOtherImage(String url){
+        ChatMessage message = new ChatMessage(url, false, true);
+        mAdapter.add(message);
+        saveMessage(url, 0, "IMAGE");
+    }
+
     private void mimicOtherMessage(String message) {
         ChatMessage chatMessage;
 
@@ -325,7 +331,7 @@ public class Basic extends AppCompatActivity implements AmazonListener {
 
             case "AMZBUY":
                 String item = message.substring(6, message.length());
-                AmazonHelper helper = new AmazonHelper();
+                AmazonHelper helper = new AmazonHelper(); //write this on top
                 helper.setOnAmazonListener(this);
                 helper.getDataforSellingItems(item);
                 chatMessage = new ChatMessage("Please wait..", false, false);
@@ -371,6 +377,8 @@ public class Basic extends AppCompatActivity implements AmazonListener {
             public void run() {
                 for(Product p : products){
                     mimicOtherMessage(p.getName());
+                    mimicOtherImage(p.getImageUrl());
+                    mimicOtherMessage("Price : ₹ " + p.getPrice());
                 }
 
                 scrollMyListViewToBottom();
@@ -378,6 +386,5 @@ public class Basic extends AppCompatActivity implements AmazonListener {
         });
 
     }
-
 
 }

@@ -146,9 +146,9 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
          * @return The created signed request url.
          */
         public String createRequestUrlFor(final AmazonWebServiceLocation serviceLocation,
-                                          final AmazonWebServiceAuthentication authentication) {
+                                          final AmazonWebServiceAuthentication authentication, int type) {
 
-            return createRequestUrlFor(serviceLocation, authentication, HTTP_PROTOCOL);
+            return createRequestUrlFor(serviceLocation, authentication, HTTP_PROTOCOL, type);
         }
 
         /**
@@ -161,11 +161,11 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
         public String createSecureRequestUrlFor(final AmazonWebServiceLocation serviceLocation,
                                                 final AmazonWebServiceAuthentication authentication) {
 
-            return createRequestUrlFor(serviceLocation, authentication, HTTPS_PROTOCOL);
+            return createRequestUrlFor(serviceLocation, authentication, HTTPS_PROTOCOL, 1);
         }
 
         private String createRequestUrlFor(final AmazonWebServiceLocation serviceLocation,
-                                           final AmazonWebServiceAuthentication authentication, final String protocol) {
+                                           final AmazonWebServiceAuthentication authentication, final String protocol, int type) {
 
             final Map<String, String> requestParams = new LinkedHashMap<>();
             requestParams.put("AWSAccessKeyId", authentication.getAwsAccessKey());
@@ -173,7 +173,7 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
             requestParams.put("Condition", itemCondition.getRequestValue());
             requestParams.put("Keywords", keywords);
             requestParams.put("Operation", OPERATION);
-            requestParams.put("ResponseGroup", createResponseGroupRequestValue(responseGroup));
+            requestParams.put("ResponseGroup", createResponseGroupRequestValue(responseGroup, type));
             requestParams.put("SearchIndex", itemCategory.getRequestValue());
             requestParams.put("Service", SERVICE);
             requestParams.put("Timestamp", DATE_FORMATTER.format(new Date()));
@@ -239,9 +239,9 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
          * @return The created signed request url.
          */
         public String createRequestUrlFor(final AmazonWebServiceLocation serviceLocation,
-                                          final AmazonWebServiceAuthentication authentication) {
+                                          final AmazonWebServiceAuthentication authentication, int type) {
 
-            return createRequestUrlFor(serviceLocation, authentication, HTTP_PROTOCOL);
+            return createRequestUrlFor(serviceLocation, authentication, HTTP_PROTOCOL, type);
         }
 
         /**
@@ -254,11 +254,11 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
         public String createSecureRequestUrlFor(final AmazonWebServiceLocation serviceLocation,
                                                 final AmazonWebServiceAuthentication authentication) {
 
-            return createRequestUrlFor(serviceLocation, authentication, HTTPS_PROTOCOL);
+            return createRequestUrlFor(serviceLocation, authentication, HTTPS_PROTOCOL, 1);
         }
 
         private String createRequestUrlFor(final AmazonWebServiceLocation serviceLocation,
-                                           final AmazonWebServiceAuthentication authentication, final String protocol) {
+                                           final AmazonWebServiceAuthentication authentication, final String protocol, int type) {
 
             final Map<String, String> requestParams = new LinkedHashMap<>();
             requestParams.put("AWSAccessKeyId", authentication.getAwsAccessKey());
@@ -267,7 +267,7 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
             requestParams.put("IdType", itemId.getType().getRequestValue());
             requestParams.put("ItemId", itemId.getValue());
             requestParams.put("Operation", OPERATION);
-            requestParams.put("ResponseGroup", createResponseGroupRequestValue(responseGroup));
+            requestParams.put("ResponseGroup", createResponseGroupRequestValue(responseGroup, type));
             requestParams.put("Service", SERVICE);
             requestParams.put("Timestamp", DATE_FORMATTER.format(new Date()));
             requestParams.put("Version", VERSION);
@@ -277,12 +277,16 @@ public final class AmazonProductAdvertisingApiRequestBuilder {
         }
     }
 
-    private static String createResponseGroupRequestValue(final List<ItemInformation> responseGroup) {
+    private static String createResponseGroupRequestValue(final List<ItemInformation> responseGroup, int type) {
         // add item attributes to response group if none was selected
-        if (responseGroup.size() == 0) {
+        if (type == 1 ) {
             //earlier --> responseGroup.add(ItemInformation.ATTRIBUTES);
             //change made by abhishek
             responseGroup.add(ItemInformation.ATTRIBUTES);
+        }
+
+        else if(type == 0){
+            responseGroup.add(ItemInformation.IMAGES);
         }
 
         String responseGroupRequestValue = "";

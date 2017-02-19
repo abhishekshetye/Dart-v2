@@ -21,6 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -48,7 +49,7 @@ public class AmazonHelper {
     public void getDataforSellingItems(String item){
         myAuthentication = AmazonWebServiceAuthentication.create(yourAssociateTag, yourAccessKeyId, yourSecretAccessKey);
         final String requestUrl = AmazonProductAdvertisingApiRequestBuilder.forItemSearch(item)
-                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication);
+                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication, 1);
         Log.d("URL ", requestUrl);
 
 
@@ -83,23 +84,42 @@ public class AmazonHelper {
 
 
 
-    private void retriveImages(String asin){
-
+    private String retriveImages(String asin){
+        String url = "";
         if(myAuthentication!=null)
             myAuthentication = AmazonWebServiceAuthentication.create(yourAssociateTag, yourAccessKeyId, yourSecretAccessKey);
         final String requestUrl = AmazonProductAdvertisingApiRequestBuilder.forItemLookup(asin, ItemId.Type.ASIN)
-                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication);
+                .createRequestUrlFor(AmazonWebServiceLocation.IN, myAuthentication, 0);
         Log.d("IMAGEURL", requestUrl);
 
         try {
-            runImageRequest(requestUrl);
+            url = syncRequest(requestUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return url;
     }
 
-    private void parseImages(String data){
+
+        public String syncRequest(String url) throws Exception {
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+            Headers responseHeaders = response.headers();
+            for (int i = 0; i < responseHeaders.size(); i++) {
+                System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+            }
+
+            return parseImages(response.body().string());
+        }
+
+
+    private String parseImages(String data){
+        String url = "";
         try {
             DocumentBuilderFactory dbFactory
                     = DocumentBuilderFactory.newInstance();
@@ -129,12 +149,13 @@ public class AmazonHelper {
                         }
                     }
                     Log.d("PARSEIMG", "images are " + smallimg+ " " + mediumimg );
+                    url = mediumimg;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return url;
     }
 
 
@@ -175,7 +196,7 @@ public class AmazonHelper {
             NodeList nList = doc.getElementsByTagName("Item");
 
             Log.d("PARSE", nList.getLength() + " ");
-
+            String asin = "";
             for(int i=0; i<3 /*nList.getLength()*/; i++){
                 Node item = nList.item(i);
                 if(item.getNodeType() == Node.ELEMENT_NODE){
@@ -186,6 +207,7 @@ public class AmazonHelper {
                         Node node = item.getChildNodes().item(k);
                         if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("ASIN")){
                             Log.d("NEWNODE", "asin " + node.getTextContent());
+                            asin = node.getTextContent();
                         }
                         else if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("parentasin")){
                             Log.d("NEWNODE", "asin " + node.getTextContent());
@@ -197,6 +219,10 @@ public class AmazonHelper {
                                 if(price.getNodeType() == Node.ELEMENT_NODE && price.getNodeName().equalsIgnoreCase("Listprice")){
                                     Log.d("PARSE", "price is " + price.getFirstChild().getTextContent());
                                     tempPrice = price.getFirstChild().getTextContent();
+                                    int l = tempPrice.length();
+                                    if(l>0){
+                                        tempPrice = tempPrice.substring(0, l-2);
+                                    }
                                 }else if(price.getNodeType() == Node.ELEMENT_NODE && price.getNodeName().equalsIgnoreCase("title")){
                                     title = price.getTextContent();
                                 }
@@ -207,7 +233,9 @@ public class AmazonHelper {
                     Product product = new Product();
                     product.setName(title);
                     product.setPrice(tempPrice);
+                    product.setImageUrl(retriveImages(asin));
                     products.add(product);
+                    Log.d("PARSEIMG", "New one now");
 //                    Node asin = item.getFirstChild();
 //                    Node detailpage = asin.getNextSibling();
 //                    Node attr = detailpage.getNextSibling().getNextSibling();
