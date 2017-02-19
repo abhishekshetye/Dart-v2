@@ -28,7 +28,7 @@
 <template><srai>SEND EMAIL</srai></template>
 </category>
 <category><pattern>SEND FEATURE REQUEST *</pattern>
-<template><think><set name="featurerequest"><star/></set></think> Click send to mail your feature request.  
+<template><think><set name="featurerequest"><star/></set></think> Click send to mail your feature request.
 <oob><email><to>callmom-info@pandorabots.com</to><subject>Feature request <get name="featurerequest"/></subject><body>Dear CallMom developers, I'd like to request that you add this feature to the next version of CallMom: <get name="featurerequest"/>.  Sincerely, <get name="name"/></body></email></oob></template>
 </category>
 <category><pattern>SHOW ME A VIDEO *</pattern>
@@ -36,6 +36,12 @@
 </category>
 <category><pattern>SHOW ME A WEBSITE ABOUT *</pattern>
 <template>Let's try a google search.  <oob><search><star/></search></oob></template>
+</category>
+<category><pattern>SHOW ME NEARBY RESTAURANTS</pattern>
+<template>ZMTLOC</template>
+</category>
+<category><pattern>RESTAURANTS NEAR ME</pattern>
+<template>ZMTLOC</template>
 </category>
 <category><pattern>I WANT TO BUY *</pattern>
 <template>AMZBUY<star/></template>

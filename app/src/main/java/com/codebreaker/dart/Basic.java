@@ -27,7 +27,9 @@ import com.codebreaker.dart.amazon.Product;
 import com.codebreaker.dart.database.DatabaseHandler;
 import com.codebreaker.dart.database.Message;
 import com.codebreaker.dart.display.ChatMessage;
-import com.codebreaker.dart.zomato.GPSTracker;
+import com.codebreaker.dart.zomato.Restaurant;
+import com.codebreaker.dart.zomato.ZomatoHelper;
+import com.codebreaker.dart.zomato.ZomatoListener;
 
 import org.alicebot.ab.AIMLProcessor;
 import org.alicebot.ab.Bot;
@@ -46,7 +48,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Basic extends AppCompatActivity implements AmazonListener {
+public class Basic extends AppCompatActivity implements AmazonListener, ZomatoListener {
 
     private static final int PERMISSION_WRITE_REQUEST_CODE = 4;
     private static final int PERMISSION_LOCATION_REQUEST_CODE = 5;
@@ -57,6 +59,10 @@ public class Basic extends AppCompatActivity implements AmazonListener {
 
     private DatabaseHandler handler;
     private ArrayList<Message> messages = new ArrayList<>();
+
+    //api helpers
+    AmazonHelper amazonhelper;
+    ZomatoHelper zomatoHelper;
 
     //UI components
     private ListView mListView;
@@ -92,8 +98,13 @@ public class Basic extends AppCompatActivity implements AmazonListener {
         }
 
 
+        //assigning helper classes
+        amazonhelper = new AmazonHelper();
+        zomatoHelper = new ZomatoHelper();
 
-
+        //assigning interfaces
+        amazonhelper.setOnAmazonListener(this);
+        zomatoHelper.setOnZomatoListener(this);
 
 
 
@@ -331,9 +342,13 @@ public class Basic extends AppCompatActivity implements AmazonListener {
 
             case "AMZBUY":
                 String item = message.substring(6, message.length());
-                AmazonHelper helper = new AmazonHelper(); //write this on top
-                helper.setOnAmazonListener(this);
-                helper.getDataforSellingItems(item);
+                amazonhelper.getDataforSellingItems(item);
+                chatMessage = new ChatMessage("Please wait..", false, false);
+                mAdapter.add(chatMessage);
+                break;
+
+            case "ZMTLOC":
+                zomatoHelper.makeLocationBasedRequest(this);
                 chatMessage = new ChatMessage("Please wait..", false, false);
                 mAdapter.add(chatMessage);
                 break;
@@ -344,7 +359,8 @@ public class Basic extends AppCompatActivity implements AmazonListener {
                 mAdapter.add(chatMessage);
         }
 
-        saveMessage(message, 0, "TEXT");
+        if(!message.equalsIgnoreCase("zmtloc") || !message.equalsIgnoreCase("amzbuy"))
+            saveMessage(message, 0, "TEXT");
 
     }
 
@@ -387,4 +403,17 @@ public class Basic extends AppCompatActivity implements AmazonListener {
 
     }
 
+    @Override
+    public void getLocationBasedRestaurants(final List<Restaurant> restaurants) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (Restaurant r : restaurants) {
+                    mimicOtherMessage(r.getName() + '\n' + r.getAddress() + '\n' + r.getRating() + '\n' + r.getCusines());
+                    mimicOtherImage(r.getImageUrl());
+                }
+                scrollMyListViewToBottom();
+            }
+        });
+    }
 }

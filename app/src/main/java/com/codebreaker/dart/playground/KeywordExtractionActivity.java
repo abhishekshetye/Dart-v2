@@ -3,20 +3,16 @@ package com.codebreaker.dart.playground;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.codebreaker.dart.AmazonProductAd;
 import com.codebreaker.dart.R;
-import com.codebreaker.dart.amazon.AmazonHelper;
 import com.codebreaker.dart.amazon.AmazonListener;
 import com.codebreaker.dart.amazon.Product;
 import com.codebreaker.dart.database.DatabaseHandler;
 import com.codebreaker.dart.database.Message;
-import com.codebreaker.dart.nlp.Extract;
 import com.codebreaker.dart.nlp.Keyword;
-import com.uttesh.exude.ExudeData;
-import com.uttesh.exude.exception.InvalidDataException;
+import com.codebreaker.dart.zomato.ZomatoHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +28,24 @@ public class KeywordExtractionActivity extends AppCompatActivity implements Amaz
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keyword_extraction);
 
-        handler = new DatabaseHandler(getApplicationContext());
-        Message msg = new Message();
-        msg.setType("TEXT");
-        msg.setMessage("My first message");
-        msg.setWho(1);
-        handler.addMessage(msg);
-        messages = handler.getMessages();
-        for(Message m : messages){
-            Log.d("SLIMF", m.getMessage());
-        }
-        handler.close();
+
+        ZomatoHelper req = new ZomatoHelper();
+        Toast.makeText(this, req.makeLocationBasedRequest(this) , Toast.LENGTH_SHORT).show();
+
+        //sqlite database test
+//        handler = new DatabaseHandler(getApplicationContext());
+//        Message msg = new Message();
+//        msg.setType("TEXT");
+//        msg.setMessage("My first message");
+//        msg.setWho(1);
+//        handler.addMessage(msg);
+//        messages = handler.getMessages();
+//        for(Message m : messages){
+//            Log.d("SLIMF", m.getMessage());
+//        }
+//        handler.close();
+
+
 
 //        AmazonHelper helper = new AmazonHelper();
 //        helper.setOnAmazonListener(this);
