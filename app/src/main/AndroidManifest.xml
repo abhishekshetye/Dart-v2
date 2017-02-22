@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -25,16 +24,11 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".Basic"
             android:label="@string/title_activity_basic"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            </activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".customapi.JsonTest"
             android:label="@string/title_activity_basic"
@@ -42,15 +36,18 @@
         <activity
             android:name=".AmazonProductAd"
             android:label="@string/title_activity_amazon_product_ad"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".playground.XMLParsing"
             android:label="My App" />
-        <activity android:name=".playground.KeywordExtractionActivity">
+        <activity android:name=".playground.KeywordExtractionActivity"></activity>
+        <activity android:name=".ShowActivity"></activity>
+        <activity android:name=".playground.UploadFirebase">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        </activity>
-        <activity android:name=".ShowActivity">
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
