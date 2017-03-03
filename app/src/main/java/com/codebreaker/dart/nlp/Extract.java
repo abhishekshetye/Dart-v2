@@ -1,13 +1,21 @@
 package com.codebreaker.dart.nlp;
 
+import android.util.Log;
+
+import com.uttesh.exude.ExudeData;
+import com.uttesh.exude.exception.InvalidDataException;
+
 import org.apache.lucene.analysis.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.PorterStemFilter;
 import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.shingle.ShingleFilter;
 import org.apache.lucene.analysis.standard.ClassicFilter;
 import org.apache.lucene.analysis.standard.ClassicTokenizer;
+import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.Version;
 
@@ -126,5 +134,31 @@ public class Extract {
             }
         }
 
+    }
+
+
+    public void extractKeyPhrase (String input){
+        try {
+            String excuded = ExudeData.getInstance().filterStoppingsKeepDuplicates(input);
+            StringReader reader = new StringReader(excuded);
+            StandardTokenizer source = new StandardTokenizer(Version.LUCENE_36, reader);
+            TokenStream tokenStream = new StandardFilter(Version.LUCENE_36, source);
+            ShingleFilter sf = new ShingleFilter(tokenStream);
+            sf.setOutputUnigrams(false);
+
+            CharTermAttribute charTermAttribute = sf.addAttribute(CharTermAttribute.class);
+            sf.reset();
+
+            while (sf.incrementToken()) {
+                Log.d("SLIMF", charTermAttribute.toString());
+            }
+
+            sf.end();
+            sf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidDataException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -49,13 +49,13 @@ public class Login extends AppCompatActivity {
         loginButton.setReadPermissions("email", "public_profile");
 
 
-
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 Profile profile = Profile.getCurrentProfile();
-                Toast.makeText(Login.this, " " + profile.getFirstName(), Toast.LENGTH_SHORT).show();
+                if(profile!=null)
+                  Toast.makeText(Login.this, " " + profile.getFirstName(), Toast.LENGTH_SHORT).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -79,7 +79,10 @@ public class Login extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid() + firebaseAuth.getCurrentUser().getUid());
+                    Intent i = new Intent(getApplicationContext(), ShowActivity.class);
+                    startActivity(i);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
