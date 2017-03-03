@@ -3,7 +3,6 @@ package com.codebreaker.dart.playground;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.amazon.AmazonListener;
@@ -11,15 +10,17 @@ import com.codebreaker.dart.amazon.Product;
 import com.codebreaker.dart.database.DatabaseHandler;
 import com.codebreaker.dart.database.Message;
 import com.codebreaker.dart.nlp.Keyword;
-import com.codebreaker.dart.zomato.ZomatoHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class KeywordExtractionActivity extends AppCompatActivity implements AmazonListener{
 
     DatabaseHandler handler;
-    ArrayList<Message> messages = new ArrayList<>();
+    List<Message> messages = new ArrayList<>();
+    List<String> interests = new ArrayList<>();
 
     List<Keyword> keywords = new ArrayList<>();
     String mess = "Kendall has small legs. Kendall has small hands. The developers of java were good. They developed handing apps";
@@ -28,9 +29,26 @@ public class KeywordExtractionActivity extends AppCompatActivity implements Amaz
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keyword_extraction);
 
+        interests.add("android");
 
-        ZomatoHelper req = new ZomatoHelper();
-        Toast.makeText(this, req.makeLocationBasedRequest(this) , Toast.LENGTH_SHORT).show();
+        DatabaseHandler handler = new DatabaseHandler(getApplicationContext());
+//        handler.addInterest("android");
+//        handler.addInterest("music", 3);
+//        handler.addInterest("developer");
+        //handler.updateDBValue(interests);
+        handler.checkAndUpdateInterest();
+        messages = handler.getAllData();
+        handler.close();
+
+        for(Message m : messages){
+            Log.d("SLIMF", m.getMessage());
+        }
+
+        Log.d("SLIMF", messages.size() + " ");
+
+//
+//        ZomatoHelper req = new ZomatoHelper();
+//        Toast.makeText(this, req.makeLocationBasedRequest(this) , Toast.LENGTH_SHORT).show();
 
         //sqlite database test
 //        handler = new DatabaseHandler(getApplicationContext());
@@ -53,7 +71,7 @@ public class KeywordExtractionActivity extends AppCompatActivity implements Amaz
 //        Log.d("HELPER", " ");
 
 
-
+//
 //        try {
 //            String excuded = ExudeData.getInstance().filterStoppingsKeepDuplicates(mess);
 //            Log.d("KEYWORD", excuded);

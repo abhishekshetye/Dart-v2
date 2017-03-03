@@ -40,14 +40,16 @@
         <activity
             android:name=".playground.XMLParsing"
             android:label="My App" />
-        <activity android:name=".playground.KeywordExtractionActivity"></activity>
-        <activity android:name=".ShowActivity"></activity>
-        <activity android:name=".playground.UploadFirebase">
+        <activity android:name=".playground.KeywordExtractionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ShowActivity"></activity>
+        <activity android:name=".playground.UploadFirebase">
+
         </activity>
     </application>
 
