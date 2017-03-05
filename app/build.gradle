@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.codebreaker.dart"
@@ -30,6 +30,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/Ab.jar')
+    compile project(':exude-0.0.3')
+    compile project(':lucene-core-3.6.2')
+    compile project(':lucene-analyzers-3.4.0')
     compile 'com.google.firebase:firebase-auth:9.8.0'
     compile 'com.google.firebase:firebase-core:9.8.0'
     compile 'com.google.firebase:firebase-database:9.8.0'
@@ -39,11 +42,11 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.amitshekhar.android:android-networking:0.3.0'
     compile 'me.himanshusoni.chatmessageview:chat-message-view:1.0.3'
-    compile project(':exude-0.0.3')
+    compile 'com.android.support:support-v4:24.2.1'
     testCompile 'junit:junit:4.12'
-    compile project(':lucene-core-3.6.2')
-    compile project(':lucene-analyzers-3.4.0')
 }
+
+
 
 
 apply plugin: 'com.google.gms.google-services'

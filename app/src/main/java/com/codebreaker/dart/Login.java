@@ -1,13 +1,19 @@
 package com.codebreaker.dart;
 
+import android.*;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.codebreaker.dart.display.*;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -30,6 +36,9 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = "FBLogin";
+
+    private static final int PERMISSION_WRITE_REQUEST_CODE = 4;
+    private static final int PERMISSION_LOCATION_REQUEST_CODE = 5;
 
     private CallbackManager mCallbackManager;
 
@@ -80,8 +89,8 @@ public class Login extends AppCompatActivity {
                     // User is signed in
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid() + firebaseAuth.getCurrentUser().getUid());
-                    Intent i = new Intent(getApplicationContext(), ShowActivity.class);
-                    startActivity(i);
+                    askPermissions();
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -89,6 +98,60 @@ public class Login extends AppCompatActivity {
                 // ...
             }
         };
+    }
+
+    private void askPermissions() {
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.ACCESS_FINE_LOCATION};
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }else{
+            Intent i = new Intent(getApplicationContext(), com.codebreaker.dart.display.ShowActivity.class);
+            startActivity(i);
+        }
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        String[] PERMISSIONS = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.ACCESS_FINE_LOCATION};
+
+        switch (requestCode) {
+            case PERMISSION_WRITE_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                }
+                break;
+
+            case PERMISSION_LOCATION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                }
+                break;
+
+        }
+
+        if (hasPermissions(this, PERMISSIONS)){
+            Intent i = new Intent(getApplicationContext(), com.codebreaker.dart.display.ShowActivity.class);
+            startActivity(i);
+        }
     }
 
     public void logout(View v){
