@@ -133,6 +133,10 @@ public class Basic extends AppCompatActivity implements AmazonListener, ZomatoLi
             @Override
             public void onClick(View v) {
                 String message = mEditTextMessage.getText().toString();
+
+                //extract keywords from message
+
+
                 String response = chat.multisentenceRespond(mEditTextMessage.getText().toString());
                 if (TextUtils.isEmpty(message)) {
                     return;

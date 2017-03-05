@@ -21,6 +21,7 @@ import org.apache.lucene.util.Version;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -137,7 +138,8 @@ public class Extract {
     }
 
 
-    public void extractKeyPhrase (String input){
+    public List<String> extractKeyPhrase (String input){
+        List<String> words = new ArrayList<>();
         try {
             String excuded = ExudeData.getInstance().filterStoppingsKeepDuplicates(input);
             StringReader reader = new StringReader(excuded);
@@ -151,6 +153,7 @@ public class Extract {
 
             while (sf.incrementToken()) {
                 Log.d("SLIMF", charTermAttribute.toString());
+                words.add(charTermAttribute.toString());
             }
 
             sf.end();
@@ -160,5 +163,7 @@ public class Extract {
         } catch (InvalidDataException e) {
             e.printStackTrace();
         }
+
+        return words;
     }
 }

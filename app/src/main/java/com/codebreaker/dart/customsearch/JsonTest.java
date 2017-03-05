@@ -1,4 +1,4 @@
-package com.codebreaker.dart.customapi;
+package com.codebreaker.dart.customsearch;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

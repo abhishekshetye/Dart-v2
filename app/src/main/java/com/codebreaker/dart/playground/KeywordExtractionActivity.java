@@ -60,6 +60,7 @@ public class KeywordExtractionActivity extends AppCompatActivity implements Amaz
 
 
 
+
         /***** INTEREST DATABASE *****/
 
 //        interests.add("android");
