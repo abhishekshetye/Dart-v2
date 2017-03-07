@@ -11,7 +11,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by abhishek on 3/5/17.
@@ -22,9 +26,10 @@ public class ExtractHandler {
 
     private FirebaseAuth mAuth;
 
-    public void extract(String message, Context context){
+    
 
-        Extract extract = new Extract();
+    public void extract(String message, Context context, Extract extract){
+
         List<String> phrases = extract.extract(message);
 
         DatabaseHandler handler = new DatabaseHandler(context);
@@ -41,6 +46,7 @@ public class ExtractHandler {
 
     public void checkAndUpload(Context context){
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //if internet is not available, dont run this method.
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();

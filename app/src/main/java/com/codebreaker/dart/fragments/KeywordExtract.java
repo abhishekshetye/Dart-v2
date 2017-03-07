@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.codebreaker.dart.nlp.Extract;
 import com.codebreaker.dart.nlp.ExtractHandler;
 import com.codebreaker.dart.nlp.Keyword;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class KeywordExtract extends Fragment {
@@ -37,11 +40,15 @@ public class KeywordExtract extends Fragment {
     TextView tv;
     EditText ed;
 
+    Extract e;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_keyword_extract, container, false);
+
+        e = new Extract(getContext());
 
         tv = (TextView) v.findViewById(R.id.tv1);
         ed = (EditText) v.findViewById(R.id.ed1);
@@ -58,12 +65,11 @@ public class KeywordExtract extends Fragment {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Extract e = new Extract();
                 //List<String> p = e.extractKeyPhrase(ed.getText().toString());
                 List<String> p = e.extract(ed.getText().toString());
                 //call my method
                 ExtractHandler extractHandler = new ExtractHandler();
-                extractHandler.extract(ed.getText().toString(), getContext());
+                extractHandler.extract(ed.getText().toString(), getContext(), e);
 
                 String dis = "";
                 for(String s : p){
@@ -82,8 +88,16 @@ public class KeywordExtract extends Fragment {
                 tv.setText(dis);
             }
         });
+
+//        try {
+//            Log.d("SLIMF", readFromAssets(getContext(), "tags.txt"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.d("SLIMF", "file open exception");
+//        }
         return v;
     }
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.codebreaker.dart.nlp;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.uttesh.exude.ExudeData;
@@ -19,7 +20,9 @@ import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.Version;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +37,10 @@ import java.util.Set;
  */
 
 public class Extract {
+
+    public Extract(Context context){
+        initSet(context);
+    }
 
     // smile nlp extractor 
 
@@ -141,6 +148,31 @@ public class Extract {
     }
 
 
+    public Set<String> tags;
+
+    public void initSet(Context context){
+        tags = new HashSet<>();
+        try {
+            readFromAssets(context, "tags.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public  void readFromAssets(Context context, String filename) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(context.getAssets().open(filename)));
+
+        // do reading, usually loop until end of file reading
+        StringBuilder sb = new StringBuilder();
+        String mLine = reader.readLine();
+        while (mLine != null) {
+            sb.append(mLine); // process line
+            tags.add(mLine);
+            mLine = reader.readLine();
+        }
+        reader.close();
+       // return sb.toString();
+    }
     /*** MY ALGORITHM **/
 
     public List<String> extract(String message){
@@ -149,15 +181,12 @@ public class Extract {
         try {
             String excluded = ExudeData.getInstance().filterStoppings(message).toLowerCase();
             String[] types = excluded.split(" ");
-            Set<String> containing = new HashSet<>();
-            containing.add("androidprogramming");
-            containing.add("iosprogramming");
             for(int i=0; i<types.length; i++){
                 for(int j=0; j<types.length; j++){
                     if(i == j) continue;
 
                     Log.d("INTRST", types[i] + types[j]);
-                    if(containing.contains(types[i] + types[j])){
+                    if(tags.contains(types[i] + types[j])){
                         bigrams.add(types[i] + " " +  types[j]);
                     }
                 }
