@@ -3,6 +3,7 @@ package com.codebreaker.dart.display;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,10 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.fragments.Chatbot;
+import com.codebreaker.dart.fragments.KeywordExtract;
 import com.codebreaker.dart.fragments.NewsFeed;
 
 public class ShowActivity extends AppCompatActivity {
@@ -43,6 +47,16 @@ public class ShowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Window window = this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this ,R.color.colorPrimaryDark));
         setContentView(R.layout.activity_show2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,6 +68,7 @@ public class ShowActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -138,6 +153,8 @@ public class ShowActivity extends AppCompatActivity {
                     return new Chatbot();
                 case 1:
                     return new NewsFeed();
+                case 2:
+                    return new KeywordExtract();
             }
 
             return PlaceholderFragment.newInstance(position + 1);
@@ -146,7 +163,7 @@ public class ShowActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -156,6 +173,8 @@ public class ShowActivity extends AppCompatActivity {
                     return "Chatbot";
                 case 1:
                     return "Newsfeed";
+                case 2:
+                    return "Keyword";
             }
             return null;
         }

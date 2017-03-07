@@ -58,7 +58,6 @@ public class NewsFeed extends Fragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerview.setAdapter(adapter);
 
-
         return v;
     }
 

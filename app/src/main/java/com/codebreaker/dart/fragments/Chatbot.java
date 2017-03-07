@@ -1,7 +1,9 @@
 package com.codebreaker.dart.fragments;
 
 
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.adapters.ChatMessageAdapter;
@@ -115,6 +118,8 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
 
                 //extract keywords from message
 
+
+                scrollMyListViewToBottom();
 
                 String response = chat.multisentenceRespond(mEditTextMessage.getText().toString());
                 if (TextUtils.isEmpty(message)) {
@@ -248,6 +253,29 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
     private void mimicOtherMessage(String message) {
         ChatMessage chatMessage;
 
+        if(message.contains("oob")){
+            String[] parts = message.split("<oob>");
+            String first = parts[0];
+            String second = parts[1];
+            if(first!=null || !first.equals("")){
+                chatMessage = new ChatMessage(first, false, false);
+                mAdapter.add(chatMessage);
+                saveMessage(first, 0, "TEXT");
+            }
+
+            Log.d("SLIMF", second.substring(0,4));
+
+            switch (second.substring(0,4)){
+                case "<emai":
+                    break;
+                case "<dia":
+                    String num = second.substring(5, 15);
+                    Log.d("SLIMF", second.substring(5,15));
+                    dail(num);
+            }
+            return;
+        }
+
         if(message.length()<6){
             chatMessage = new ChatMessage(message, false, false);
             //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
@@ -333,6 +361,15 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
                 scrollMyListViewToBottom();
             }
         });
+    }
+
+
+    /***** PHONE FUNCTIONS *****/
+
+    private void dail(String num){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + num));
+        startActivity(intent);
     }
 
 }

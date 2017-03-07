@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.codebreaker.dart.database.DatabaseHandler;
+import com.codebreaker.dart.database.Message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -24,18 +25,22 @@ public class ExtractHandler {
     public void extract(String message, Context context){
 
         Extract extract = new Extract();
-        List<String> phrases = extract.extractKeyPhrase(message);
+        List<String> phrases = extract.extract(message);
 
         DatabaseHandler handler = new DatabaseHandler(context);
         for(String phrase: phrases){
             handler.addInterest(phrase);
+        }
+        List<Message> d = handler.getAllData();
+        for(Message m : d){
+            Log.d("SLIMF", m.getMessage());
         }
         handler.close();
     }
 
 
     public void checkAndUpload(Context context){
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -44,8 +49,13 @@ public class ExtractHandler {
         DatabaseHandler handler = new DatabaseHandler(context);
         handler.checkAndUpdateInterest();
         List<String> phrases = handler.getInterestsToUpload();
+        if(phrases.size() == 0)
+            Log.d("SLIMF", "None to upload yet");
+        for(String s: phrases){
+            Log.d("SLIMF", "to upload -> " + s );
+        }
         for(String interest: phrases){
-            DatabaseReference newRef = reference.child("interests").push();
+            DatabaseReference newRef = reference.child("interests").child("bigram").push();
             newRef.setValue(interest);
         }
         handler.updateDBValue(phrases);

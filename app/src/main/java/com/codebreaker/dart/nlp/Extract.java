@@ -88,9 +88,11 @@ public class Extract {
 
     public static List<Keyword> guessFromString(String input) throws IOException {
 
+        List<Keyword> keywords = new LinkedList<Keyword>();
         TokenStream tokenStream = null;
         try {
 
+            input = ExudeData.getInstance().filterStoppings(input);
             // hack to keep dashed words (e.g. "non-specific" rather than "non" and "specific")
             input = input.replaceAll("-+", "-0");
             // replace any punctuation char but apostrophes and dashes by a space
@@ -109,7 +111,6 @@ public class Extract {
             // remove english stop words
             tokenStream = new StopFilter(Version.LUCENE_36, tokenStream, EnglishAnalyzer.getDefaultStopSet());
 
-            List<Keyword> keywords = new LinkedList<Keyword>();
             CharTermAttribute token = tokenStream.getAttribute(CharTermAttribute.class);
             tokenStream.reset();
             while (tokenStream.incrementToken()) {
@@ -129,12 +130,44 @@ public class Extract {
 
             return keywords;
 
+        } catch (InvalidDataException e) {
+            e.printStackTrace();
         } finally {
             if (tokenStream != null) {
                 tokenStream.close();
             }
         }
+        return keywords;
+    }
 
+
+    /*** MY ALGORITHM **/
+
+    public List<String> extract(String message){
+
+        List<String> bigrams = new ArrayList<>();
+        try {
+            String excluded = ExudeData.getInstance().filterStoppings(message).toLowerCase();
+            String[] types = excluded.split(" ");
+            Set<String> containing = new HashSet<>();
+            containing.add("androidprogramming");
+            containing.add("iosprogramming");
+            for(int i=0; i<types.length; i++){
+                for(int j=0; j<types.length; j++){
+                    if(i == j) continue;
+
+                    Log.d("INTRST", types[i] + types[j]);
+                    if(containing.contains(types[i] + types[j])){
+                        bigrams.add(types[i] + " " +  types[j]);
+                    }
+                }
+            }
+
+        } catch (InvalidDataException e) {
+            e.printStackTrace();
+        }
+
+        return bigrams;
     }
 
 
