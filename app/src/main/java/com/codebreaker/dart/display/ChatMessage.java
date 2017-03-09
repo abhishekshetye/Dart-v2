@@ -10,11 +10,24 @@ public class ChatMessage {
     private boolean isImage, isMine;
     private String content;
     private Drawable imagesource;
+    private String deeplink;
 
     public ChatMessage(String message, boolean mine, boolean image) {
         content = message;
         isMine = mine;
         isImage = image;
+    }
+
+    public ChatMessage(String message, boolean mine, boolean image, String deeplink) {
+        content = message;
+        isMine = mine;
+        isImage = image;
+        this.deeplink = deeplink;
+    }
+
+
+    public String getDeeplink(){
+        return deeplink;
     }
 
     public Drawable getImagesource() {

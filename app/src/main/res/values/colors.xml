@@ -6,4 +6,8 @@
 
     <color name="ogcolor">#ff00bcd4</color>
     <color name="ogcolorbk">#8800bcd4</color>
+
+    <color name="btn_press">#6ca7d1</color>
+    <color name="btn_focus">#82938f</color>
+    <color name="btn_normal">#a7b3b0</color>
 </resources>

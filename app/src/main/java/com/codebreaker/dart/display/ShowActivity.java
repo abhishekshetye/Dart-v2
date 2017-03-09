@@ -21,11 +21,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.fragments.Chatbot;
 import com.codebreaker.dart.fragments.KeywordExtract;
 import com.codebreaker.dart.fragments.NewsFeed;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ShowActivity extends AppCompatActivity {
 
@@ -74,8 +79,6 @@ public class ShowActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -175,10 +175,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void addInterest (String interest, int number) {
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(number==-1){
+            db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_COUNT, 0);
+            values.put(KEY_INTEREST, interest);
+            values.put(KEY_ISINDB, 0);
+            values.put(KEY_ISINTEREST, 1);
+            // Inserting Row
+            db.insert(TABLE_INTERESTS, null, values);
+            Log.d("SLIMF", "interest added");
+            return;
+        }
+
         //check if the same interest exists
         String selectQuery = "SELECT  * FROM " + TABLE_INTERESTS + " WHERE " + KEY_INTEREST + " =  \"" + interest + "\"";
 
-        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursorz = db.rawQuery(selectQuery, null);
         int length = cursorz.getCount();
         if(length != 0){

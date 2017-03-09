@@ -3,6 +3,7 @@ package com.codebreaker.dart;
 import android.*;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -30,6 +31,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
 
@@ -89,6 +92,7 @@ public class Login extends AppCompatActivity {
                     // User is signed in
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid() + firebaseAuth.getCurrentUser().getUid());
+                    updatePersonalInformation(); // change
                     askPermissions();
 
                 } else {
@@ -107,8 +111,23 @@ public class Login extends AppCompatActivity {
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }else{
-            Intent i = new Intent(getApplicationContext(), com.codebreaker.dart.display.ShowActivity.class);
-            startActivity(i);
+
+            SharedPreferences prefs = getSharedPreferences("MYPREFS", MODE_PRIVATE);
+            boolean should = prefs.getBoolean("TAG_LAUNCH", true);
+
+            if(should){
+                Intent i = new Intent(getApplicationContext(), com.codebreaker.dart.display.TagSelector.class);
+                startActivity(i);
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("TAG_LAUNCH", false);
+                editor.commit();
+            }else{
+                Intent i = new Intent(getApplicationContext(), com.codebreaker.dart.display.ShowActivity.class);
+                startActivity(i);
+            }
+
+
         }
     }
 
@@ -123,6 +142,14 @@ public class Login extends AppCompatActivity {
         return true;
     }
 
+    private void updatePersonalInformation() {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        Toast.makeText(this, " " + user.getEmail(), Toast.LENGTH_SHORT).show();
+        ref.child("users").child(user.getUid()).child("personal").child("name").setValue(user.getDisplayName());
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {

@@ -1,6 +1,8 @@
 package com.codebreaker.dart.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +43,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
         else return OTHER_IMAGE;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         int viewType = getItemViewType(position);
         if (viewType == MY_MESSAGE) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_message, parent, false);
@@ -67,7 +69,14 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
         convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "onClick", Toast.LENGTH_LONG).show();
+                ChatMessage msg = getItem(position);
+                String dl = msg.getDeeplink();
+                if(dl!=null){
+                    String url = dl;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    context.startActivity(i);
+                }
             }
         });
         return convertView;

@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.Key;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class ExtractHandler {
 
     private FirebaseAuth mAuth;
 
-    
+
 
     public void extract(String message, Context context, Extract extract){
 
@@ -36,6 +37,17 @@ public class ExtractHandler {
         for(String phrase: phrases){
             handler.addInterest(phrase);
         }
+
+        try {
+            List<Keyword> keywords = extract.guessFromString(message);
+            for(Keyword keyword: keywords){
+                handler.addInterest(keyword.getStem(), keyword.getFrequency());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         List<Message> d = handler.getAllData();
         for(Message m : d){
             Log.d("SLIMF", m.getMessage());

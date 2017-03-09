@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.codebreaker.dart.display.TagSelector"
+    tools:showIn="@layout/activity_tag_selector"
+    android:layout_marginLeft="10dp"
+    >
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Your interests"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp"
+                />
+
+
+            <Button
+                android:id="@+id/bsci"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Science"
+                android:onClick="science"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+
+            <Button
+                android:id="@+id/bsports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sports"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+            <Button
+                android:id="@+id/bbiz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Business"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+
+            <Button
+                android:id="@+id/bpoli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Politics"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+
+            <Button
+                android:id="@+id/bios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="iOS"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+
+            <Button
+                android:id="@+id/btech"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Technology"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+
+            <Button
+                android:id="@+id/bandr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Android"
+                android:background="@color/btn_normal"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

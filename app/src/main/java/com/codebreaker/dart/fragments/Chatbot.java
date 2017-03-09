@@ -1,9 +1,11 @@
 package com.codebreaker.dart.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -16,13 +18,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.adapters.ChatMessageAdapter;
 import com.codebreaker.dart.amazon.AmazonHelper;
 import com.codebreaker.dart.amazon.AmazonListener;
 import com.codebreaker.dart.amazon.Product;
+import com.codebreaker.dart.customsearch.CustomListener;
+import com.codebreaker.dart.customsearch.CustomSearchHandler;
 import com.codebreaker.dart.database.DatabaseHandler;
 import com.codebreaker.dart.database.Message;
 import com.codebreaker.dart.display.ChatMessage;
@@ -46,11 +49,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Chatbot extends Fragment implements AmazonListener, ZomatoListener {
+public class Chatbot extends Fragment implements AmazonListener, ZomatoListener, CustomListener {
 
 
     public Chatbot() {
@@ -66,6 +71,7 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
     //api helpers
     AmazonHelper amazonhelper;
     ZomatoHelper zomatoHelper;
+    CustomSearchHandler customSearchHandler;
 
     //UI components
     private ListView mListView;
@@ -83,10 +89,12 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
         //assigning helper classes
         amazonhelper = new AmazonHelper();
         zomatoHelper = new ZomatoHelper();
+        customSearchHandler = new CustomSearchHandler();
 
         //assigning interfaces
         amazonhelper.setOnAmazonListener(this);
         zomatoHelper.setOnZomatoListener(this);
+        customSearchHandler.setOnCustomHandlerListener(this);
 
 
 
@@ -250,6 +258,170 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
         saveMessage(url, 0, "IMAGE");
     }
 
+
+    private void wifi(String m){
+        int i,j,k;
+        for( i=0; i<m.length()-4; i++){
+            if(m.substring(i,i+4).equalsIgnoreCase("wifi"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-4)
+            for(j=i+5; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("DAIL", "wifi -> " + p );
+        WifiManager wifi = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if(p.substring(0, p.length()-1).equalsIgnoreCase("ON")){
+            wifi.setWifiEnabled(true); // true or false to activate/deactivate wifi
+        }else if (p.substring(0, p.length()-1).equalsIgnoreCase("OFF")){
+            wifi.setWifiEnabled(false); // true or false to activate/deactivate wifi
+        }
+    }
+
+    private void dial(String m){
+        int i,j,k;
+        for( i=0; i<m.length()-4; i++){
+            if(m.substring(i,i+4).equalsIgnoreCase("dial"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-4)
+            for(j=i+5; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("DAIL", "dial -> " + p );
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + ((p.length()>0)?p.substring(0, p.length()-1): p)));
+        startActivity(intent);
+    }
+
+    private void url(String m){
+        int i,j,k;
+        for( i=0; i<m.length()-3; i++){
+            if(m.substring(i,i+3).equalsIgnoreCase("url"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-3)
+            for(j=i+4; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("SEARCH", "url -> " + p );
+        Intent in = new Intent(Intent.ACTION_VIEW);
+        in.setData(Uri.parse(p.substring(0, p.length()-1)));
+        getContext().startActivity(in);
+    }
+
+    private void search(String m){
+        int i,j,k;
+        for( i=0; i<m.length()-6; i++){
+            if(m.substring(i,i+6).equalsIgnoreCase("search"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-6)
+            for(j=i+7; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("SEARCH", "topic " + p );
+        try {
+            customSearchHandler.run(p.substring(0, p.length()-1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void email(String m){
+        int i,j,k;
+        for( i=0; i<m.length()-4; i++){
+            if(m.substring(i,i+4).equalsIgnoreCase("wifi"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-4)
+            for(j=i+5; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("DAIL", "wifi -> " + p );
+    }
+
+    private void maps(String m){
+        int i,j,k;
+        for( i=0; i<m.length()-3; i++){
+            if(m.substring(i,i+3).equalsIgnoreCase("map"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-3)
+            for(j=i+4; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("MAPS", "from " + p );
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + p.substring(0, p.length()-1));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+    }
+
+    private void directions(String m){
+        int i,j,k;
+        Log.d("DIRECTIONS", m);
+        for( i=0; i<m.length()-4; i++){
+            if(m.substring(i,i+4).equalsIgnoreCase("from"))
+                break;
+        }
+        String p = "";
+        if(i!=m.length()-4)
+            for(j=i+5; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("DIRECTIONS", "from " + p );
+
+        for( i=0; i<m.length()-3; i++){
+            if(m.substring(i,i+3).equalsIgnoreCase("<to"))
+                break;
+        }
+        String from = p;
+        p = "";
+        if(i!=m.length()-2)
+            for(j=i+4; j<m.length()-1; j++){
+                p+=m.charAt(j);
+                if(m.substring(j,j+1).equals("<"))
+                    break;
+            }
+
+        Log.d("DIRECTIONS", "to " + p );
+        if(!from.equals("")){
+
+        }else{
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("google.navigation:q=" + p.substring(0, p.length()-1)));
+            startActivity(intent);
+        }
+    }
+
     private void mimicOtherMessage(String message) {
         ChatMessage chatMessage;
 
@@ -262,16 +434,35 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
                 mAdapter.add(chatMessage);
                 saveMessage(first, 0, "TEXT");
             }
+            int i;
+            for(i=0; i<message.length()-4; i++){
+                message.substring(i,i+4).equalsIgnoreCase("<oob>");
+                break;
+            }
 
             Log.d("SLIMF", second.substring(0,4));
 
             switch (second.substring(0,4)){
-                case "<emai":
+                case "<url":
+                    url(second);
+                    break;
+                case "<map":
+                    maps(second);
+                    break;
+                case "<wif":
+                    wifi(second);
+                    break;
+                case "<dir":
+                    directions(second);
+                    break;
+                case "<ema":
                     break;
                 case "<dia":
-                    String num = second.substring(5, 15);
-                    Log.d("SLIMF", second.substring(5,15));
-                    dail(num);
+                    dial(second);
+                    break;
+                case "<sea":
+                    search(second);
+                    break;
             }
             return;
         }
@@ -301,7 +492,6 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
 
             default:
                 chatMessage = new ChatMessage(message, false, false);
-                //chatMessage.setImagesource(getResources().getDrawable(R.drawable.bot, getTheme()));
                 mAdapter.add(chatMessage);
         }
 
@@ -320,6 +510,12 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
     private void mimicOtherMessage() {
         ChatMessage chatMessage = new ChatMessage(null, false, true);
         mAdapter.add(chatMessage);
+    }
+
+    private void mimicOtherMessageWithLink(String message, String link ){
+        ChatMessage chatMessage = new ChatMessage(message, false, false, link);
+        mAdapter.add(chatMessage);
+        saveMessage(message, 0, "TEXT");
     }
 
     private void scrollMyListViewToBottom() {
@@ -364,12 +560,17 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener 
     }
 
 
-    /***** PHONE FUNCTIONS *****/
 
-    private void dail(String num){
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + num));
-        startActivity(intent);
+    @Override
+    public void getCustomData(final String title, final String link, final String snippet) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                    mimicOtherMessageWithLink(title, link);
+                    mimicOtherMessage(snippet);
+
+                scrollMyListViewToBottom();
+            }
+        });
     }
-
 }

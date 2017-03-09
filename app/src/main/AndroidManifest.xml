@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
         android:name=".MyApplication"
@@ -33,7 +34,7 @@
         <activity
             android:name=".Basic"
             android:label="@string/title_activity_basic"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".customsearch.JsonTest"
             android:label="@string/title_activity_basic"
@@ -45,13 +46,19 @@
         <activity
             android:name=".playground.XMLParsing"
             android:label="My App" />
-        <activity android:name=".playground.KeywordExtractionActivity"></activity>
+        <activity android:name=".playground.KeywordExtractionActivity" />
         <activity android:name=".ShowActivity" />
-        <activity android:name=".playground.UploadFirebase"></activity>
+        <activity android:name=".playground.UploadFirebase" />
         <activity
             android:name=".display.ShowActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".display.TagSelector"
+            android:label="@string/title_activity_tag_selector"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>
