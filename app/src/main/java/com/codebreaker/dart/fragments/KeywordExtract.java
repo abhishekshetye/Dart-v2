@@ -66,10 +66,12 @@ public class KeywordExtract extends Fragment {
             @Override
             public void onClick(View v) {
                 //List<String> p = e.extractKeyPhrase(ed.getText().toString());
-                List<String> p = e.extract(ed.getText().toString());
+                String msg = ed.getText().toString();
+                Log.d("INTRST", "sent -> " + msg );
+                List<String> p = e.extract(msg);
                 //call my method
                 ExtractHandler extractHandler = new ExtractHandler();
-                extractHandler.extract(ed.getText().toString(), getContext(), e);
+                extractHandler.extract(msg, getContext(), e);
 
                 String dis = "";
                 for(String s : p){
