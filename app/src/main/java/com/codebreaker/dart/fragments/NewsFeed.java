@@ -45,12 +45,15 @@ public class NewsFeed extends Fragment {
     }
 
 
+    String qry = "table tennis";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_news_feed, container, false);
-        NetworkUrl("https://api.newsriver.io/v2/search?query=title%3A%22table%20tennis%22&sortBy=discoverDate&sortOrder=DESC&limit=15");
+        //Remaining...
+        NetworkUrl("https://api.newsriver.io/v2/search?query=" + qry + "&sortBy=discoverDate&sortOrder=DESC&limit=15");
 
         recyclerview = (RecyclerView) v.findViewById(R.id.newsfeedrecycler);
         recyclerview.setItemAnimator(new DefaultItemAnimator());

@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity {
                     // User is signed in
 
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid() + firebaseAuth.getCurrentUser().getUid());
-                    updatePersonalInformation(); // change
+                    //updatePersonalInformation(); // change
                     askPermissions();
 
                 } else {

@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class ShowActivity extends AppCompatActivity {
 
@@ -48,6 +49,8 @@ public class ShowActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,22 @@ public class ShowActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
+        updatePersonalInformation();
+
     }
+
+    private void updatePersonalInformation() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        //Toast.makeText(this, " " + user.getEmail(), Toast.LENGTH_SHORT).show();
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        ref.child("users").child(user.getUid()).child("personal").child("name").setValue(user.getDisplayName());
+        ref.child("users").child(user.getUid()).child("personal").child("token").setValue(refreshedToken);
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
