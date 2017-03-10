@@ -69,6 +69,7 @@ public class KeywordExtract extends Fragment {
                 String msg = ed.getText().toString();
                 Log.d("INTRST", "sent -> " + msg );
                 List<String> p = e.extract(msg);
+                List<String> ps = e.extractKeyPhrase(msg);
                 //call my method
                 ExtractHandler extractHandler = new ExtractHandler();
                 extractHandler.extract(msg, getContext(), e);
@@ -77,6 +78,12 @@ public class KeywordExtract extends Fragment {
                 for(String s : p){
                     dis += s + " ";
                 }
+                dis += " | ";
+                for(String s : ps){
+                    dis += s + " ";
+                }
+
+                dis += " | ";
                 try {
                     List<Keyword> kw = e.guessFromString(ed.getText().toString());
                     for(Keyword k : kw){

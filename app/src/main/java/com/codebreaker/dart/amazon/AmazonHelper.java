@@ -202,7 +202,7 @@ public class AmazonHelper {
                 if(item.getNodeType() == Node.ELEMENT_NODE){
                     //Log.d("PARSE", item.getNodeName() + " ");
 
-                    String tempPrice = ""; String title="";
+                    String tempPrice = ""; String title=""; String deeplink = "";
                     for(int k=0; k<item.getChildNodes().getLength(); k++){
                         Node node = item.getChildNodes().item(k);
                         if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("ASIN")){
@@ -211,6 +211,9 @@ public class AmazonHelper {
                         }
                         else if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("parentasin")){
                             Log.d("NEWNODE", "asin " + node.getTextContent());
+                        }else if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("DetailPageURL")){
+                            Log.d("NEWNODE", "detail page " + node.getTextContent());
+                            deeplink = node.getTextContent();
                         }
                         else if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("itemattributes")){
                             Log.d("NEWNODE", "asin " + node.getChildNodes().getLength() + " ");
@@ -233,6 +236,7 @@ public class AmazonHelper {
                     Product product = new Product();
                     product.setName(title);
                     product.setPrice(tempPrice);
+                    product.setDeeplink(deeplink);
                     product.setImageUrl(retriveImages(asin));
                     products.add(product);
                     Log.d("PARSEIMG", "New one now");

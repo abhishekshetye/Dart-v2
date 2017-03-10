@@ -11,16 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.codebreaker.dart.News;
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.adapters.NewsfeedAdapter;
+import com.codebreaker.dart.database.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,7 +42,6 @@ public class NewsFeed extends Fragment {
 
     private final OkHttpClient client = new OkHttpClient();
     String NEWSFEED_API = "sBBqsGXiYgF0Db5OV5tAw7w2w2z2uV0kwr2rFM99s0IDMfrSG8OBGXeB2iH4XmiX";
-    List<String> news = new ArrayList<>();
 
     private RecyclerView recyclerview;
     private NewsfeedAdapter adapter;
@@ -44,8 +50,11 @@ public class NewsFeed extends Fragment {
         // Required empty public constructor
     }
 
+    Set<Integer> visited = new HashSet<>();
+    String qry = "technology";
+    List<News> news = new ArrayList<>();
 
-    String qry = "table tennis";
+    List<String> topics = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +62,11 @@ public class NewsFeed extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_news_feed, container, false);
         //Remaining...
-        NetworkUrl("https://api.newsriver.io/v2/search?query=" + qry + "&sortBy=discoverDate&sortOrder=DESC&limit=15");
+//        try {
+//            NetworkUrl("https://api.newsriver.io/v2/search?query=text%3A" + URLEncoder.encode(qry, "UTF-8").replace("+", "%20")  + "&sortBy=discoverDate&sortOrder=DESC&limit=15");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
 
         recyclerview = (RecyclerView) v.findViewById(R.id.newsfeedrecycler);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
@@ -61,10 +74,42 @@ public class NewsFeed extends Fragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerview.setAdapter(adapter);
 
+        getRandomInterests(); //test this
+
         return v;
     }
 
+    public void getRandomInterests(){
+        DatabaseHandler handler = new DatabaseHandler(getContext());
+        List<String> interests = handler.getInterests();
+        if(interests.size()==0){
+            return;
+        }
+        for(int j = 0; j<interests.size() && j<3 ; j++) {
+
+            int max = interests.size();
+            int randomNum = ThreadLocalRandom.current().nextInt(0, max);
+            while (visited.contains(randomNum)) {
+                randomNum = ThreadLocalRandom.current().nextInt(0, max);
+            }
+            visited.add(randomNum);
+
+            topics.add(interests.get(randomNum));
+        }
+
+
+        for(String topic: topics){
+            try {
+                NetworkUrl("https://api.newsriver.io/v2/search?query=text%3A" + URLEncoder.encode(topic, "UTF-8").replace("+", "%20")  + "&sortBy=discoverDate&sortOrder=DESC&limit=15");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     private void NetworkUrl(String url){
+
         Request request = new Request.Builder()
                 .addHeader("Authorization", NEWSFEED_API)
                 .url(url)
@@ -92,7 +137,11 @@ public class NewsFeed extends Fragment {
 
             for(int i=0; i<arr.length(); i++){
                 JSONObject obj = arr.getJSONObject(i);
-                news.add(obj.getString("title"));
+
+                String desc = obj.getString("text");
+                String title = obj.getString("title");
+
+                news.add(new News(title, desc));
             }
 
         } catch (JSONException e) {

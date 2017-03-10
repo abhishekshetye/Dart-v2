@@ -4,6 +4,7 @@ package com.codebreaker.dart.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -478,16 +480,26 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
         switch(message.substring(0,6)){
 
             case "AMZBUY":
-                String item = message.substring(6, message.length());
-                amazonhelper.getDataforSellingItems(item);
-                chatMessage = new ChatMessage("Please wait..", false, false);
-                mAdapter.add(chatMessage);
+                if(!isNetworkConnected()){
+                    chatMessage = new ChatMessage("No internet connection.", false, false);
+                    mAdapter.add(chatMessage);
+                }else {
+                    String item = message.substring(6, message.length());
+                    amazonhelper.getDataforSellingItems(item);
+                    chatMessage = new ChatMessage("Please wait..", false, false);
+                    mAdapter.add(chatMessage);
+                }
                 break;
 
             case "ZMTLOC":
-                zomatoHelper.makeLocationBasedRequest(getContext());
-                chatMessage = new ChatMessage("Please wait..", false, false);
-                mAdapter.add(chatMessage);
+                if(!isInternetAvailable()){
+                    chatMessage = new ChatMessage("No internet connection.", false, false);
+                    mAdapter.add(chatMessage);
+                }else {
+                    zomatoHelper.makeLocationBasedRequest(getContext());
+                    chatMessage = new ChatMessage("Please wait..", false, false);
+                    mAdapter.add(chatMessage);
+                }
                 break;
 
             default:
@@ -498,6 +510,22 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
         if(!message.equalsIgnoreCase("zmtloc") || !message.equalsIgnoreCase("amzbuy"))
             saveMessage(message, 0, "TEXT");
 
+    }
+
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("www.google.com"); //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 
     private void sendMessage() {
@@ -534,7 +562,7 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
             @Override
             public void run() {
                 for(Product p : products){
-                    mimicOtherMessage(p.getName());
+                    mimicOtherMessageWithLink(p.getName(), p.getDeeplink());
                     mimicOtherImage(p.getImageUrl());
                     mimicOtherMessage("Price : ₹ " + p.getPrice());
                 }

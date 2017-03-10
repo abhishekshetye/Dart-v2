@@ -10,6 +10,16 @@ public class Product {
     String price;
     String imageUrl;
 
+    public String getDeeplink() {
+        return deeplink;
+    }
+
+    public void setDeeplink(String deeplink) {
+        this.deeplink = deeplink;
+    }
+
+    String deeplink;
+
     public String getName() {
         return name;
     }
