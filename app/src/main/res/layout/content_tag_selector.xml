@@ -13,6 +13,7 @@
 
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteY="8dp"
@@ -29,39 +30,57 @@
                 android:id="@+id/tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Select Your interests"
                 tools:layout_editor_absoluteY="0dp"
                 tools:layout_editor_absoluteX="0dp"
                 android:textSize="20sp"
+                android:textColor="#000"
                 android:layout_marginTop="15dp"
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Select at least three"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp"
+                android:textColor="#000"
+                android:textSize="17sp"
+                />
 
             <Button
                 android:id="@+id/bsci"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Science"
+                android:layout_gravity="center_horizontal"
                 android:onClick="science"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
+                android:padding="15dp"
                 />
 
             <Button
                 android:id="@+id/bsports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Sports"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
+                android:padding="15dp"
                 />
             <Button
                 android:id="@+id/bbiz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Business"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
+                android:padding="15dp"
                 />
 
             <Button
@@ -69,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Politics"
+                android:layout_gravity="center_horizontal"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
                 />
@@ -78,6 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="iOS"
+                android:layout_gravity="center_horizontal"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
                 />
@@ -86,9 +107,11 @@
                 android:id="@+id/btech"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="Technology"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
+                android:padding="15dp"
                 />
 
             <Button
@@ -96,8 +119,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Android"
+                android:layout_gravity="center_horizontal"
                 android:background="@color/btn_normal"
                 android:layout_marginTop="10dp"
+                android:padding="15dp"
                 />
 
         </LinearLayout>

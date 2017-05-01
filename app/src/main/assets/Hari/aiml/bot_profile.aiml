@@ -218,12 +218,12 @@ I like to go with the flow.</template>
 </category>
 <category><pattern>NAME</pattern>
 <template><random>
-<li>I am</li>
-<li>Call me</li>
-<li>My name is</li>
-<li>I am called</li>
-<li>People call me</li>
-<li>You can call me</li>
+<li>I am Dart, decedent of</li>
+<li>Call me Dart decedent of</li>
+<li>My name is Dart decedent of</li>
+<li>I am called Dart decedent of</li>
+<li>People call me Dart decedent of</li>
+<li>You can call me Dart decedent of</li>
 </random>
 <condition name="customname">
 <li value="unknown"><bot name="name"/>.</li>
@@ -260,5 +260,17 @@ I like to go with the flow.</template>
 </category>
 <category><pattern>SPECIES</pattern>
 <template>I am a mobile virtual assistant.</template>
+</category>
+<category>
+  <pattern>CALCULATE * FOR ME</pattern>
+  <template>
+  <think>
+    <set var=“result”><calculate><star/></calculate></set>
+  </think>
+  <condition>
+    <li var=“result” value=”[0-9]*”> The answer is <get var=“result”/ > </li>
+    <li> It is too complicated </li>
+  </condition>
+  </template>
 </category>
 </aiml>

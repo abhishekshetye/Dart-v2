@@ -100,12 +100,11 @@ public class NewsFeed extends Fragment {
 
         for(String topic: topics){
             try {
-                NetworkUrl("https://api.newsriver.io/v2/search?query=text%3A" + URLEncoder.encode(topic, "UTF-8").replace("+", "%20")  + "&sortBy=discoverDate&sortOrder=DESC&limit=15");
+                NetworkUrl("https://api.newsriver.io/v2/search?query=language%3Aen%20OR%20text%3A" + URLEncoder.encode(topic, "UTF-8").replace("+", "%20")  + "&sortBy=discoverDate&sortOrder=DESC&limit=15");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void NetworkUrl(String url){

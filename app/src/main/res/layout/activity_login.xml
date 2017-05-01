@@ -9,12 +9,65 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
+    <ImageView
+        android:id="@+id/mainicon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/dart"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/someid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dart App"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_below="@+id/mainicon"
+        android:layout_marginTop="5dp"
+        android:textColor="#000"
+        />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@drawable/robot"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/someid"
+        />
+
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:visibility="visible"
+        android:layout_below="@+id/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        />
+
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:text="The A.I. based chatbot with interest extraction and newsfeed."
+        android:layout_centerHorizontal="true"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
         />
 
 

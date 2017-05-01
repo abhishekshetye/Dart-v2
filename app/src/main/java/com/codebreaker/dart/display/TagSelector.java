@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.codebreaker.dart.R;
 import com.codebreaker.dart.database.DatabaseHandler;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class TagSelector extends AppCompatActivity {
 
-    int sci = 1, andr = 1, tech =1 , poli = 1, ios= 1 , biz = 1, spor = 1;
+    int sci = 0, andr = 0, tech =0 , poli = 0, ios= 0, biz = 0, spor = 0;
 
     Button bsci, btech, bandr, bios, bpoli, bspor, bbiz;
 
@@ -92,6 +93,7 @@ public class TagSelector extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Toast.makeText(TagSelector.this, "Setting up the environment", Toast.LENGTH_SHORT).show();
                 DatabaseHandler handler = new DatabaseHandler(TagSelector.this);
 
                 if(sci%2==1){

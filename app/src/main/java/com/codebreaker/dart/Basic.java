@@ -112,7 +112,7 @@ public class Basic extends AppCompatActivity implements AmazonListener, ZomatoLi
         mListView = (ListView) findViewById(R.id.listView);
         mButtonSend = (FloatingActionButton) findViewById(R.id.btn_send);
         mEditTextMessage = (EditText) findViewById(R.id.et_message);
-        mImageView = (ImageView) findViewById(R.id.iv_image);
+        //mImageView = (ImageView) findViewById(R.id.iv_image);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {

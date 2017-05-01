@@ -1,5 +1,7 @@
 package com.codebreaker.dart.display;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +29,7 @@ import com.codebreaker.dart.R;
 import com.codebreaker.dart.fragments.Chatbot;
 import com.codebreaker.dart.fragments.KeywordExtract;
 import com.codebreaker.dart.fragments.NewsFeed;
+import com.codebreaker.dart.fragments.Settings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -81,20 +84,23 @@ public class ShowActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
         updatePersonalInformation();
 
     }
 
     @Override
     public void onBackPressed() {
-
+        super.onBackPressed();
     }
 
     private void updatePersonalInformation() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        String key = ref.getKey();
+        SharedPreferences.Editor editor = getSharedPreferences("MYPREFS", MODE_PRIVATE).edit();
+        editor.putString("MYKEY", key);
+        editor.commit();
         //Toast.makeText(this, " " + user.getEmail(), Toast.LENGTH_SHORT).show();
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         ref.child("users").child(user.getUid()).child("personal").child("name").setValue(user.getDisplayName());
@@ -118,6 +124,8 @@ public class ShowActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent i = new Intent(ShowActivity.this, ExtractActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -179,8 +187,10 @@ public class ShowActivity extends AppCompatActivity {
                     return new Chatbot();
                 case 1:
                     return new NewsFeed();
+//                case 2:
+//                    return new KeywordExtract();
                 case 2:
-                    return new KeywordExtract();
+                    return new Settings();
             }
 
             return PlaceholderFragment.newInstance(position + 1);
@@ -199,8 +209,10 @@ public class ShowActivity extends AppCompatActivity {
                     return "Chatbot";
                 case 1:
                     return "Newsfeed";
+//                case 2:
+//                    return "Keyword";
                 case 2:
-                    return "Keyword";
+                    return "Profile";
             }
             return null;
         }

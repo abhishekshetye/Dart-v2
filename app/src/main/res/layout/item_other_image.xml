@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         app:cmv_arrowGravity="start"
         app:cmv_arrowPosition="left"
-        app:cmv_backgroundColor="#8800bcd4"
-        app:cmv_backgroundColorPressed="#ff00bcd4"
+        app:cmv_backgroundColor="#FFB300"
+        app:cmv_backgroundColorPressed="#FFC107"
         app:cmv_cornerRadius="3dp"
         app:cmv_showArrow="true">
 

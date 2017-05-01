@@ -3,14 +3,18 @@ package com.codebreaker.dart.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +34,8 @@ import com.codebreaker.dart.customsearch.CustomSearchHandler;
 import com.codebreaker.dart.database.DatabaseHandler;
 import com.codebreaker.dart.database.Message;
 import com.codebreaker.dart.display.ChatMessage;
+import com.codebreaker.dart.nlp.Extract;
+import com.codebreaker.dart.nlp.ExtractHandler;
 import com.codebreaker.dart.zomato.Restaurant;
 import com.codebreaker.dart.zomato.ZomatoHelper;
 import com.codebreaker.dart.zomato.ZomatoListener;
@@ -81,6 +87,7 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
     private EditText mEditTextMessage;
     private ImageView mImageView;
     private ChatMessageAdapter mAdapter;
+    private Extract e;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,13 +105,17 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
         zomatoHelper.setOnZomatoListener(this);
         customSearchHandler.setOnCustomHandlerListener(this);
 
+        e = new Extract(getContext());
+
+
+
 
 
         //setting ids for components
         mListView = (ListView) v.findViewById(R.id.listView);
         mButtonSend = (FloatingActionButton) v.findViewById(R.id.btn_send);
         mEditTextMessage = (EditText) v.findViewById(R.id.et_message);
-        mImageView = (ImageView) v.findViewById(R.id.iv_image);
+        //mImageView = (ImageView) v.findViewById(R.id.iv_image);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +130,16 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
         mListView.setAdapter(mAdapter);
 
         loadEarlierMessages();
+        //first message
+        SharedPreferences prefs = getContext().getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        if(prefs.getBoolean("FIRST", true)){
+            sendMessage("Hi! ");
+            sendMessage("Nice to meet you! ");
+            mimicOtherMessage("Hi! How can I help you? ");
+        }
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("FIRST", false);
+        editor.commit();
 
 //code for sending the message
         mButtonSend.setOnClickListener(new View.OnClickListener() {
@@ -138,12 +159,23 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
                 sendMessage(message);
                 mimicOtherMessage(response);
                 mEditTextMessage.setText("");
+                extraction(mEditTextMessage.getText().toString());
                 mListView.setSelection(mAdapter.getCount() - 1);
             }
         });
 
         initChatbot();
         return v;
+    }
+
+    private void extraction(String msg) {
+
+        Log.d("INTRST", "sent -> " + msg );
+        List<String> p = e.extract(msg);
+        List<String> ps = e.extractKeyPhrase(msg);
+        //call my method
+        ExtractHandler extractHandler = new ExtractHandler();
+        extractHandler.extract(msg, getContext(), e);
     }
 
     private void initChatbot() {
@@ -260,6 +292,12 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
         saveMessage(url, 0, "IMAGE");
     }
 
+    private void mimicOtherImageWithLink(String url, String link){
+        ChatMessage message = new ChatMessage(url, false, true, link);
+        mAdapter.add(message);
+        saveMessage(url, 0, "IMAGE");
+    }
+
 
     private void wifi(String m){
         int i,j,k;
@@ -363,6 +401,17 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
         Log.d("DAIL", "wifi -> " + p );
     }
 
+    private void battery(String sec){
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getContext().registerReceiver(null, ifilter);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = level / (float)scale;
+        mimicOtherMessage(batteryPct + " % ");
+
+    }
+
     private void maps(String m){
         int i,j,k;
         for( i=0; i<m.length()-3; i++){
@@ -451,6 +500,9 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
                 case "<map":
                     maps(second);
                     break;
+                case "<bat":
+                    battery(second);
+                    break;
                 case "<wif":
                     wifi(second);
                     break;
@@ -492,7 +544,7 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
                 break;
 
             case "ZMTLOC":
-                if(!isInternetAvailable()){
+                if(!isNetworkConnected()){
                     chatMessage = new ChatMessage("No internet connection.", false, false);
                     mAdapter.add(chatMessage);
                 }else {
@@ -563,7 +615,7 @@ public class Chatbot extends Fragment implements AmazonListener, ZomatoListener,
             public void run() {
                 for(Product p : products){
                     mimicOtherMessageWithLink(p.getName(), p.getDeeplink());
-                    mimicOtherImage(p.getImageUrl());
+                    mimicOtherImageWithLink(p.getImageUrl(), p.getDeeplink());
                     mimicOtherMessage("Price : ₹ " + p.getPrice());
                 }
 
